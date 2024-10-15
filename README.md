@@ -41,13 +41,6 @@ A organização do projeto foi planejada para ser clara e escalável, seguindo b
 ├── package.json # Definições e dependências do projeto 
 └── README.md #
 ```
-## Documentação do projeto
-
-- **/cli**: Responsável por todas as interações da linha de comando.
-- **/controllers**: Gerencia a lógica de criação, atualização, busca e remoção de notas.
-- **/models**: Define a estrutura das notas no MongoDB.
-- **/config**: Contém as configurações de banco de dados e outras variáveis de ambiente.
-- **server.js**: Inicializa um servidor básico, caso queira expandir para uma API no futuro.
 
 ## 🛠️ Comandos da CLI
 
