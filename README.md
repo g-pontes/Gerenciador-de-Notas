@@ -25,16 +25,22 @@ Este projeto visa proporcionar uma maneira fácil de gerenciar notas diretamente
 
 A organização do projeto foi planejada para ser clara e escalável, seguindo boas práticas de desenvolvimento. Abaixo, a estrutura básica do projeto:
 
-/note-manager │ 
+```bash
+/note-manager
 ├── /cli # Módulos relacionados à CLI 
-│ └── noteCLI.js # Arquivo principal da CLI 
+│   └── noteCLI.js # Arquivo principal da CLI
+├── /models # Definições dos modelos de dados (MongoDB) 
+│   └── note.js
 ├── /controllers # Controladores que lidam com as regras de negócio 
-│ └── noteController.js ├── /models # Definições dos modelos de dados (MongoDB) 
-│ └── note.js ├── /config # Configurações do banco de dados e ambiente 
-│ └── database.js ├── server.js # Inicialização da aplicação (opcional) 
+│   └── noteController.js
+├── /routes
+│   └── clienteRoutes.js // Arquivo de rotas para clientes
+├── /config # Configurações do banco de dados e ambiente 
+│   └── database.js
+├── server.js # Inicialização da aplicação (opcional) 
 ├── package.json # Definições e dependências do projeto 
 └── README.md #
-
+```
 ## Documentação do projeto
 
 - **/cli**: Responsável por todas as interações da linha de comando.
