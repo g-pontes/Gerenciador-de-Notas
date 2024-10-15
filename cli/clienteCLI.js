@@ -40,14 +40,81 @@ program
   .action(async (cmd) => {
     try {
       const novoCliente = new Cliente({
-        nome: cmd.nome, // Acessa o valor passado para o parâmetro nome
-        email: cmd.email, // Acessa o valor passado para o parâmetro email
-        telefone: cmd.telefone // Acessa o valor passado para o parâmetro telefone, se houver
+        nome: cmd.nome,
+        email: cmd.email,
+        telefone: cmd.telefone
       });
       await novoCliente.save(); // Salva o novo cliente no banco de dados
-      console.log('Cliente criado com sucesso:', novoCliente); // Exibe uma mensagem de sucesso
+      console.log('Cliente criado com sucesso:', novoCliente);
     } catch (error) {
-      console.error('Erro ao criar cliente:', error); // Mostra um erro caso algo dê errado
+      console.error('Erro ao criar cliente:', error);
+    } finally {
+      process.exit(); // Encerra o processo
+    }
+  });
+
+// Comando para atualizar um cliente existente
+program
+  .command('atualizar') // Nome do comando
+  .description('Atualiza um cliente existente') // Descrição do que o comando faz
+  .requiredOption('-i, --id <id>', 'ID do cliente a ser atualizado') // ID do cliente a ser atualizado
+  .option('-n, --nome <nome>', 'Novo nome do cliente') // Parâmetro opcional para o nome
+  .option('-e, --email <email>', 'Novo email do cliente') // Parâmetro opcional para o email
+  .option('-t, --telefone <telefone>', 'Novo telefone do cliente') // Parâmetro opcional para o telefone
+  .action(async (cmd) => {
+    const { id, nome, email, telefone } = cmd;
+
+    // Verifica se o ID é válido
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      console.error('ID inválido');
+      return process.exit(1);
+    }
+
+    try {
+      const clienteAtualizado = await Cliente.findByIdAndUpdate(
+        id,
+        { nome, email, telefone },
+        { new: true, runValidators: true }
+      );
+
+      if (!clienteAtualizado) {
+        console.error('Cliente não encontrado');
+        return process.exit(1);
+      }
+
+      console.log('Cliente atualizado com sucesso:', clienteAtualizado);
+    } catch (error) {
+      console.error('Erro ao atualizar cliente:', error);
+    } finally {
+      process.exit(); // Encerra o processo
+    }
+  });
+
+// Comando para deletar um cliente
+program
+  .command('deletar') // Nome do comando
+  .description('Deleta um cliente existente') // Descrição do que o comando faz
+  .requiredOption('-i, --id <id>', 'ID do cliente a ser deletado') // ID do cliente a ser deletado
+  .action(async (cmd) => {
+    const { id } = cmd;
+
+    // Verifica se o ID é válido
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      console.error('ID inválido');
+      return process.exit(1);
+    }
+
+    try {
+      const clienteDeletado = await Cliente.findByIdAndDelete(id);
+
+      if (!clienteDeletado) {
+        console.error('Cliente não encontrado');
+        return process.exit(1);
+      }
+
+      console.log('Cliente deletado com sucesso!');
+    } catch (error) {
+      console.error('Erro ao deletar cliente:', error);
     } finally {
       process.exit(); // Encerra o processo
     }

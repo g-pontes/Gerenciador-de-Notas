@@ -34,7 +34,7 @@ app.get('/clientes', async (req, res) => {
     const clientes = await Cliente.find();
     res.status(200).send(clientes);
   } catch (error) {
-    console.error('deu erroooo', error);
+    console.error('deu erro', error);
   }
   res.status(500)
 });
@@ -43,7 +43,7 @@ app.post('/clientes', async (req, res) => {
   const cliente = new Cliente(req.body);
   try {
     await cliente.save();
-    res.status(201).send(cliente);
+    res.status(201).send({ message: 'Cliente criado com sucesso!' });
   } catch (error) {
     console.error('Erro ao salvar cliente:', error); // Log detalhado
     res.status(400).send({ message: 'Falha ao salvar cliente', error });
@@ -71,10 +71,33 @@ app.put('/clientes/:id', async (req, res) => {
       return res.status(404).send({ message: 'Cliente não encontrado' });
     }
 
-    res.status(200).send(clienteAtualizado);
+    res.status(200).send({ message: 'Cliente atualizado com sucesso!' });
   } catch (error) {
     console.error('Erro ao atualizar cliente:', error);
     res.status(500).send({ message: 'Erro ao atualizar cliente', error });
+  }
+});
+
+app.delete('/clientes/:id', async (req, res) => {
+  const { id } = req.params;
+
+  // Verifica se o ID é válido
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).send({ message: 'ID inválido' });
+  }
+
+  try {
+    const clienteDeletado = await Cliente.findByIdAndDelete(id);
+
+    // Verifica se o cliente foi encontrado
+    if (!clienteDeletado) {
+      return res.status(404).send({ message: 'Cliente não encontrado' });
+    }
+
+    res.status(200).send({ message: 'Cliente deletado com sucesso!' });
+  } catch (error) {
+    console.error('Erro ao deletar cliente:', error);
+    res.status(500).send({ message: 'Erro ao deletar cliente', error });
   }
 });
 
