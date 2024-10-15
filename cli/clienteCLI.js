@@ -122,3 +122,4 @@ program
 
 // Parseia os argumentos passados pelo terminal
 program.parse(process.argv);
+
